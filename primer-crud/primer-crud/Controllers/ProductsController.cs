@@ -1,16 +1,21 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using primer_crud.Models;
 using primer_crud.Serveces;
+using System.Data;
 
 namespace primer_crud.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext context;
+        private readonly IWebHostEnvironment environment;
 
-        public ProductsController(ApplicationDbContext context)
+        public ProductsController(ApplicationDbContext context, IWebHostEnvironment environment)
         {
             this.context = context;
+            this.environment = environment;
         }
         // GET: ProductsController
         public ActionResult Index()
@@ -24,6 +29,7 @@ namespace primer_crud.Controllers
         {
             return View();
         }
+
 
         // GET: ProductsController/Details/5
         public ActionResult Details(int id)
@@ -50,7 +56,25 @@ namespace primer_crud.Controllers
         // GET: ProductsController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var products = context.products.Find(id);
+
+            if (products == null)
+            {
+                return RedirectToAction("Index", "Products");
+            }
+
+            var productDto = new ProductDto()
+            {
+                Name = products.Name,
+                Clave = products.Clave,
+                Fecha = products.Fecha,
+            };
+
+            ViewData["ProductId"] = products.Id;
+            ViewData["Fecha"] = products.Fecha;
+            ViewData["Clave"] = products.Clave;
+
+            return View(productDto);
         }
 
         // POST: ProductsController/Edit/5
