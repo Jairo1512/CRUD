@@ -19,18 +19,19 @@ namespace primer_crud.Controllers
             return View(products);
         }
 
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
         // GET: ProductsController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: ProductsController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
+        
         // POST: ProductsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
